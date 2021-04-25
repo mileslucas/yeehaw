@@ -8,5 +8,11 @@ A round-up of probabilistic transit-fitting software.
 
 ## Data tested
 
+## Setup
+
+1. Install Python requirements (preferrably inside virtual environment)
+   
+$
+
 ## License
 
