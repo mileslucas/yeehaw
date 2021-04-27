@@ -1,3 +1,6 @@
 [deps]
+ArviZ = "131c737c-5715-5e2e-ad31-c244f01c1dc7"
+NPZ = "15e1cf62-19b3-5cfa-8e77-841668bca605"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+Transits = "2e59a628-7bac-4d38-8059-3a73ba0928ab"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
