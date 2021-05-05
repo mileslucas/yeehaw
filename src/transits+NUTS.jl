@@ -7,6 +7,7 @@ using StatsPlots
 using Random
 using Transits
 using Turing
+using NestedSamplers
 
 
 rootdir(args...) = joinpath(@__DIR__, args...)
@@ -28,6 +29,7 @@ ground_truth = Dict(
 )
 
 phases = @. (t - ground_truth["t0"] + ground_truth["period"] / 2) % ground_truth["period"] - ground_truth["period"] / 2
+# phases, flux_phase, mod_phase = Transits.phaseup(phases, flux, true_mod; period=ground_truth["period"], t0=ground_truth["t0"])
 maxphase = 0.1
 inds = @. abs(phases) < maxphase
 

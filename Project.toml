@@ -1,6 +1,9 @@
 [deps]
 ArviZ = "131c737c-5715-5e2e-ad31-c244f01c1dc7"
+Bijectors = "76274a88-744f-5084-9051-94815aaf08c4"
 NPZ = "15e1cf62-19b3-5cfa-8e77-841668bca605"
+NestedSamplers = "41ceaf6f-1696-4a54-9b49-2e7a9ec3782e"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Transits = "2e59a628-7bac-4d38-8059-3a73ba0928ab"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
