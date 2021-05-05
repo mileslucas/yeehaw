@@ -183,5 +183,11 @@ Thumbs.db
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
-n
 poetry.lock
+
+data
+
+!data/generated_data.npz
+!data/generated_data_100ppm.npz
+
+src/exofast/*.dat
