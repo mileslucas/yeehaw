@@ -3,6 +3,9 @@
 %% Define new commands here
 \newcommand\latex{La\TeX}
 
+\graphicspath{{./}{figures/}}
+\shortauthors{Lucas et al.}
+
 \begin{document}
 
 \title{Yeehaw: A Roundup of Probabilistic Transit Modeling Packages}
@@ -27,18 +30,14 @@
 \section{} 
 
 
-%% An example figure call using \includegraphics
 \begin{figure}[h!]
-\begin{center}
-\includegraphics[scale=0.85,angle=0]{aas.pdf}
-\caption{Top page of the AAS Journals' website, \url{http://journals.aas.org},
-on October 15, 2017.  Each RNAAS manuscript is only allowed one figure or
-table (but not both). Including the
-\href{http://journals.aas.org//authors/data.html\#DbF}{data behind the figure}
-in a Note is encouraged, and the data will be provided as a link in the
-published Note.\label{fig:1}}
-\end{center}
+    \centering
+    % \epsscale{0.8}
+    \plotone{ror}
+    \caption{}
+    \label{fig:ror}
 \end{figure}
+
 
 % \acknowledgments
 
