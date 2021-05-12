@@ -1,4 +1,7 @@
 \documentclass[RNAAS]{aastex631}
+\usepackage{hyperref}
+\let\tablenum\relax
+\usepackage{siunitx}
 
 %% Define new commands here
 \newcommand\latex{La\TeX}
@@ -17,8 +20,8 @@
 \email{mdlucas@hawaii.edu}
 
 \author[0000-0001-6341-310X]{Miles Lucas}
-
-\affiliation{Institute for Astronomy, University of Hawai'i}
+\affiliation{Institute for Astronomy, University of Hawai'i \\
+2680 Woodlawn Dr, Honolulu, HI 96822, USA}
 
 %% Note that RNAAS manuscripts DO NOT have abstracts.
 %% See the online documentation for the full list of available subject
@@ -29,15 +32,13 @@
 %% research note leave the \section call blank to make the title.
 \section{} 
 
+The method of transit photometry has proven indispensable in the detection and characterization of thousands of exoplanets over the past few decades \citep{2007prpl.conf..701C,2009IAUS..253...99W,2010exop.book...55W,2010trex.book.....H}. Transits are particularly useful for determining relative radii \citep{2019A&A...623A.137H}, constraining orbital inclination \citep{2003ApJ...585.1038S}, and the planet's orbital ephemeris. These quantities all have to be inferred using a computed model of the planetary transit. Model accuracy directly affects the inference of these parameters and a recent study by \citet{2020AJ....159..123A} has improved numerical accuracy of the popular quadratic limb-darkening law \citep{2002ApJ...580L.171M} to within $\mathcal{O}(10^{-15})$ along with analytical derivatives. This study directly probes the speed and accuracy of various limb-darkening laws, and we seek to improve upon that work and study how different models affect the statistical inference of transit parameters.
 
-\begin{figure}[h!]
-    \centering
-    % \epsscale{0.8}
-    \plotone{ror}
-    \caption{}
-    \label{fig:ror}
-\end{figure}
+The following packages which provided limb-darkened transit curves were tested: \texttt{exoplanet} \citep{2019ascl.soft10005F}, \texttt{BATMAN} \citep{2015PASP..127.1161K}, \texttt{PyTransit} \citep{Parviainen2015}, and \texttt{EXOFASTv2} \citep{2019arXiv190709480E}. These libraries have a variety of limb-darkening laws, but all have a quadratic limb-darkening law following the framework of \citet{2002ApJ...580L.171M}. In addition, \texttt{exoplanet} and \texttt{EXOFASTv2} have entire statistical modeling frameworks built into or on top of the transit curves. We also test \texttt{Juliet} \citep{2019MNRAS.490.2262E}, which adds a statistical modeling framework to the \texttt{BATMAN} transit models.
 
+To begin, we used the highly accurate \citet{2020AJ....159..123A} transit models to simulate a light curve. We build a hierarchical model using the \texttt{exoplanet} framework with the following parameters: the semi-major axis, orbital period, time of inferior conjunction, ratio of planet to stellar radii, limb-darkening coefficients, and out-of-transit noise. The ground truth parameters were chosen to roughly mock the Kepler-101b transit \citep{2014A&A...572A...2B} and are shown in \autoref{table}.
+
+\input{table.tex}
 
 % \acknowledgments
 
