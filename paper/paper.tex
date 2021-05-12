@@ -1,0 +1,54 @@
+\documentclass[RNAAS]{aastex631}
+
+%% Define new commands here
+\newcommand\latex{La\TeX}
+
+\begin{document}
+
+\title{Yeehaw: A Roundup of Probabilistic Transit Modeling Packages}
+
+%% Note that the corresponding author command and emails has to come
+%% before everything else. Also place all the emails in the \email
+%% command instead of using multiple \email calls.
+\correspondingauthor{Miles Lucas}
+\email{mdlucas@hawaii.edu}
+
+\author[0000-0001-6341-310X]{Miles Lucas}
+
+\affiliation{Institute for Astronomy, University of Hawai'i}
+
+%% Note that RNAAS manuscripts DO NOT have abstracts.
+%% See the online documentation for the full list of available subject
+%% keywords and the rules for their use.
+\keywords{}
+
+%% Start the main body of the article. If no sections in the 
+%% research note leave the \section call blank to make the title.
+\section{} 
+
+
+%% An example figure call using \includegraphics
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.85,angle=0]{aas.pdf}
+\caption{Top page of the AAS Journals' website, \url{http://journals.aas.org},
+on October 15, 2017.  Each RNAAS manuscript is only allowed one figure or
+table (but not both). Including the
+\href{http://journals.aas.org//authors/data.html\#DbF}{data behind the figure}
+in a Note is encouraged, and the data will be provided as a link in the
+published Note.\label{fig:1}}
+\end{center}
+\end{figure}
+
+% \acknowledgments
+
+% \software{
+% astropy \citep{2013A&A...558A..33A,2018AJ....156..123A},
+% numpy \citep{harris2020array},
+% scikit-image \citep{2014arXiv1407.6245V},
+% }
+
+\bibliography{references}{}
+\bibliographystyle{aasjournal}
+
+\end{document}
