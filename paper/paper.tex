@@ -1,7 +1,7 @@
 \documentclass[RNAAS]{aastex631}
 \usepackage{hyperref}
 \let\tablenum\relax
-\usepackage{siunitx}
+\usepackage[output-exponent-marker = \text{e}]{siunitx}
 
 %% Define new commands here
 \newcommand\latex{La\TeX}
@@ -13,30 +13,38 @@
 
 \title{Yeehaw: A Roundup of Probabilistic Transit Modeling Packages}
 
-%% Note that the corresponding author command and emails has to come
-%% before everything else. Also place all the emails in the \email
-%% command instead of using multiple \email calls.
 \correspondingauthor{Miles Lucas}
 \email{mdlucas@hawaii.edu}
 
 \author[0000-0001-6341-310X]{Miles Lucas}
-\affiliation{Institute for Astronomy, University of Hawai'i \\
-2680 Woodlawn Dr, Honolulu, HI 96822, USA}
+\affiliation{Institute for Astronomy, University of Hawai'i, USA}
 
-%% Note that RNAAS manuscripts DO NOT have abstracts.
-%% See the online documentation for the full list of available subject
-%% keywords and the rules for their use.
-\keywords{}
 
-%% Start the main body of the article. If no sections in the 
-%% research note leave the \section call blank to make the title.
-\section{} 
+\begin{abstract}
+In this research note we report on the statistical outputs of popular transit modeling packages: \texttt{exoplanet}, \texttt{BATMAN}, \texttt{PyTransit}, \texttt{Juliet}, and \texttt{EXOFASTv2}. We use a circular Keplerian orbit with a quadratic limb-darkening law to generate data with additive white noise and then perform statistical inference using the packages' implementations of transit curves and statistical models. Our results show that none of the packages we tested significantly biases the posterior results away from the true value, although \texttt{EXOFASTv2} had slightly different posteriors due to different prior parameterizations.
+\end{abstract}
 
-The method of transit photometry has proven indispensable in the detection and characterization of thousands of exoplanets over the past few decades \citep{2007prpl.conf..701C,2009IAUS..253...99W,2010exop.book...55W,2010trex.book.....H}. Transits are particularly useful for determining relative radii \citep{2019A&A...623A.137H}, constraining orbital inclination \citep{2003ApJ...585.1038S}, and the planet's orbital ephemeris. These quantities all have to be inferred using a computed model of the planetary transit. Model accuracy directly affects the inference of these parameters and a recent study by \citet{2020AJ....159..123A} has improved numerical accuracy of the popular quadratic limb-darkening law \citep{2002ApJ...580L.171M} to within $\mathcal{O}(10^{-15})$ along with analytical derivatives. This study directly probes the speed and accuracy of various limb-darkening laws, and we seek to improve upon that work and study how different models affect the statistical inference of transit parameters.
+\section{Introduction} 
 
-The following packages which provided limb-darkened transit curves were tested: \texttt{exoplanet} \citep{2019ascl.soft10005F}, \texttt{BATMAN} \citep{2015PASP..127.1161K}, \texttt{PyTransit} \citep{Parviainen2015}, and \texttt{EXOFASTv2} \citep{2019arXiv190709480E}. These libraries have a variety of limb-darkening laws, but all have a quadratic limb-darkening law following the framework of \citet{2002ApJ...580L.171M}. In addition, \texttt{exoplanet} and \texttt{EXOFASTv2} have entire statistical modeling frameworks built into or on top of the transit curves. We also test \texttt{Juliet} \citep{2019MNRAS.490.2262E}, which adds a statistical modeling framework to the \texttt{BATMAN} transit models.
+The method of transit photometry has proven indispensable in the detection and characterization of thousands of exoplanets over the past few decades \citep{2007prpl.conf..701C,2009IAUS..253...99W,2010exop.book...55W,2010trex.book.....H}. These quantities all have to be inferred using a computed model of the planetary transit. Model accuracy directly affects the inference of these parameters and a recent study by \citet{2020AJ....159..123A} has improved numerical accuracy of the popular quadratic limb-darkening law \citep{2002ApJ...580L.171M} to within $\mathcal{O}(10^{-15})$ along with analytical derivatives. The rapid growth of the exoplanet community means not every user who uses a given package will understand, in full, the statistical implications of their choices, and it is important to make sure the transit modeling ecosystem is not imparting bias into exoplanet studies. We seek to improve upon the work by \citet{2020AJ....159..123A} and study how different packages affect the statistical inference of astrophysical parameters.
 
-To begin, we used the highly accurate \citet{2020AJ....159..123A} transit models to simulate a light curve. We build a hierarchical model using the \texttt{exoplanet} framework with the following parameters: the semi-major axis, orbital period, time of inferior conjunction, ratio of planet to stellar radii, limb-darkening coefficients, and out-of-transit noise. The ground truth parameters were chosen to roughly mock the Kepler-101b transit \citep{2014A&A...572A...2B} and are shown in \autoref{table}.
+The following packages provide limb-darkened transit curves: \texttt{exoplanet} \citep{2019ascl.soft10005F}, \texttt{BATMAN} \citep{2015PASP..127.1161K}, \texttt{PyTransit} \citep{Parviainen2015}, and \texttt{EXOFASTv2} \citep{2019arXiv190709480E}. From these packages we use the quadratic limb-darkening law from \citet{2002ApJ...580L.171M}. In addition, \texttt{exoplanet} and \texttt{EXOFASTv2} have entire statistical modeling frameworks built into or on top of the transit curves. We also test \texttt{Juliet} \citep{2019MNRAS.490.2262E}, which adds a statistical modeling framework to the \texttt{BATMAN} transit models.
+
+\section{Modeling}
+
+To begin, we used the highly accurate \citet{2020AJ....159..123A} transit models to simulate a light curve. The ground truth parameters were chosen to roughly mock the Kepler-101b transit \citep{2014A&A...572A...2B} and are shown in \autoref{table}. We built a hierarchical model using \texttt{PyMC3} \citep{2016ascl.soft10016S} and \texttt{exoplanet} with the following parameters: the semi-major axis ($aR_*$), orbital period ($P$), time of inferior conjunction ($t_0$), ratio of planet to stellar radii ($R_P/R_*$), limb-darkening coefficients ($u_1,u_2$), and out-of-transit noise ($\sigma$). This parameterization is supported (at least indirectly) by all packages tested and has the benefit of no correlations in the orbital parameters, which can degrade accuracy and performance of inference methods. We built this model in a generic way that could substitute different limb-darkening laws between \texttt{exoplanet}, \texttt{BATMAN}, and \texttt{PyTransit}.
+
+The prior parameterization is chosen to be slightly uninformative, but some tuning was done to ensure consistent outputs. For the period and semi-major axis we use log-Normal priors, for the time of inferior conjunction we use a Normal prior, for the limb-darkening coefficients we use uninformative triangular sampling \citep{2013MNRAS.435.2152K} provided by \texttt{exoplanet}, and finally for the noise term we use a half-Cauchy distribution. The simulated data is compared to the models using a Gaussian likelihood without any additional noise model. For performing statistical inference with \texttt{PyMC3}, we use both the No-U-Turn Sampler (NUTS; \citealp{2011arXiv1111.4246H}) and Metropolis-Hastings (MH). Analytical derivatives are required for NUTS, and therefore we only tested it with the \texttt{exoplanet} light curve models.
+
+For \texttt{Juliet} we needed to change the parameterization slightly-- in the previous models the error is completely modeled by the noise term inside the Gaussian likelihood, but we had to skip modeling this term for \texttt{Juliet} because it fails to evaluate a finite likelihood if the error in its data model is 0. We followed the \texttt{Juliet} documentation for building our model-- the main differences are that period and semi-major axis are sampled using a Normal distribution rather than a log-Normal. For inference, \texttt{Juliet} uses \texttt{DYNESTY} \citep{2020MNRAS.493.3132S} to perform nested sampling (NS; \citealp{2004AIPC..735..395S}) providing both posterior samples and an estimate of the Bayesian evidence for our model.
+
+For \texttt{EXOFASTv2} we also had to alter the parameterization slightly; rather than fitting the semi-major axis directly, we had to fit the stellar mass and fix the planetary mass. Similar to our \texttt{Juliet} setup, we use a Normal prior for period and time of inferior conjunction rather than log-Normal priors, and we also use a Uniform prior for the noise \textit{variance}. Importantly, the limb-darkening coefficients use an informative prior from \citet{2011A&A...529A..75C}. For inference \texttt{EXOFASTv2} uses a differential evolution Metropolis-Hastings algorithm (DEMH; \citealp{2006S&C....16..239T}) which uses an ensemble of walkers which query each other between steps to temper their proposal scales.
+
+\section{Results}
+
+We performed inference on all of our models, starting with a numerical optimization to decrease the time taken to converge on a solution during the MCMC inference. For the NUTS sampler we used \num{5,000} tuning steps and \num{5,000} samples. For the MH sampler we used \num{5,000} burn-in steps and \num{10,000} samples. In all cases this was enough samples to produce a Gelman-Rubin statistic close to 1.0, which implies that the chains are \textit{well-mixed}, Nested sampling samples until convergence \citep[see][\S 2.4]{2020MNRAS.493.3132S}, which produced \num{29,000} samples which were equally resampled using their statistical weights. \texttt{EXOFASTv2} was set to sample until the Gelman-Rubin statistic for the DEMH walkers was below 1.01, which generated \num{50,500} samples.
+
+The posteriors from all of our inferences are tabulated in \autoref{table}. The table shows the median value of all posterior samples along with the 68\% highest-posterior-density interval (HDI). This is similar to a ``1-sigma confidence interval" but in a Bayesian context. Every model and inference combination \textit{except} for \texttt{EXOFASTv2} was consistent with each other and fits the data very well. A key parameter, the relative radius ($R_P/R_*$) is recovered and almost identically distributed for all our models. We believe the differences in posteriors from \texttt{EXOFASTv2} are from the different limb-darkening prior used.
 
 \input{table.tex}
 
